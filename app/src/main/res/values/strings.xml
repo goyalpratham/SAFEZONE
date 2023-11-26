@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">LocationTracker</string>
+    <string name="location_updates">Location Updates</string>
+    <string name="latitude">Latitude :</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="x_axis">X-axis:</string>
+    <string name="y_axis">Y-axis:</string>
+    <string name="z_axis">Z-axis:</string>
+    <string name="title_activity_start_accident_detection">startAccidentDETECTION</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="type_your_email" />
+    <string name="type_your_password" />
+    <string name="sign_in" />
+    <string name="not_registered_yet_sign_up" />
+</resources>
