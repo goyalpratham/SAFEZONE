@@ -1,27 +1,28 @@
 package com.example.loginandsignup
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.content.Context
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import com.example.loginandsignup.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.example.loginandsignup.databinding.ActivityMapsBinding
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -54,6 +55,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
+//        val i = Intent("location_send")
+//        intent.putExtra("latitude", latitude)
+//        intent.putExtra("longitude", longitude)
+//        sendBroadcast(i)
         val sydney = LatLng(latitude, longitude)
 
         mMap.addMarker(MarkerOptions().position(sydney).title("Your Location"))

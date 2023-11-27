@@ -1,6 +1,6 @@
 package com.example.loginandsignup
 
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +12,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class SignUpActivity : AppCompatActivity(){
+
+
     //variable binding for signupactivitybinding
     private lateinit var binding: SignUpActivityBinding
     //variable for firebaseAuth
@@ -39,25 +41,30 @@ class SignUpActivity : AppCompatActivity(){
             val Emergency=binding.confirmEt.text.toString()
 
             if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty() && Emergency.isNotEmpty()) {
-                val user = hashMapOf(
-                    "Email" to email,
-                    "EmergencyNumber" to Emergency
-                )
-                db.collection("users")
-                    .add(user)
-                    .addOnSuccessListener { documentReference ->
-                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(TAG, "Error adding document", e)
-                    }
                 if (pass == confirmPass) {
-                    //we will send email and password to firebaseAuth and result will be stored in it
+//                    we will send email and password to firebaseAuth and result will be stored in it
+                    val i = Intent("sending data")
+                    intent.putExtra("Email", email)
+                    intent.putExtra("EmergencyContact", Emergency)
+                    sendBroadcast(i)
+                    val user = hashMapOf(
+                        "Email" to email,
+                        "EmergencyNumber" to Emergency
+                    )
+                    db.collection("users")
+                        .add(user)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(ContentValues.TAG, "Error adding document", e)
+                        }
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
 //                            if successful result can be send to signinactivity
                             val intent = Intent(this, SignInActivity::class.java)
                             startActivity(intent)
+
                         } else {
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
 

@@ -1,14 +1,17 @@
 package com.example.loginandsignup
 
 import android.app.AlertDialog
-import android.hardware.SensorEventListener
+import android.content.ContentValues
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.Toast
-import kotlin.math.sqrt
 import android.media.MediaPlayer
-import java.util.logging.Handler
+import android.os.Bundle
+import android.telephony.SmsManager
+import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlin.math.sqrt
 
 class startAccidentDetection : AppCompatActivity(){
 
@@ -16,6 +19,7 @@ class startAccidentDetection : AppCompatActivity(){
     private lateinit var alertDialog: AlertDialog
     private val handler = android.os.Handler()
     private val delayDuration = 20000 // 20 seconds in milliseconds
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +48,8 @@ class startAccidentDetection : AppCompatActivity(){
         if (accelerationMagnitude > accidentThreshold) {
             showAccidentDialog()
             playAlarm()
+            readData()
+            sendSms()
             handler.postDelayed({
                 alertDialog.dismiss()
                 stopAlarm()
@@ -95,6 +101,72 @@ class startAccidentDetection : AppCompatActivity(){
         handler.removeCallbacksAndMessages(null) // Cancel any pending tasks
         alertDialog.dismiss()
 
+    }
+//    private fun sendEmergencyMessage() {
+//        val email =intent.getStringExtra("Email")
+//        val emergencyContact = intent.getStringExtra("EmergencyContact")
+//        val latitude = intent.getDoubleExtra("latitude", 0.0)
+//        val longitude = intent.getDoubleExtra("longitude", 0.0)
+//        Toast.makeText(this, "Siddharth", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "$emergencyContact", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "$latitude", Toast.LENGTH_SHORT).show()
+
+//        if (email != null) {
+//            if (emergencyContact != null) {
+//                if (email.isNotEmpty() && emergencyContact.isNotEmpty()) {
+//                    val message = "Emergency! User at $latitude, $longitude has had an accident."
+
+                    // Implement the logic to send an emergency message
+                    // For example, you can use SMS APIs or an SMS gateway to send the message
+                    // Here, I'm assuming a function named sendSms for illustration purposes
+//                    sendSms(emergencyContact, message)
+//                }
+//            }
+//        }
+//    }
+    private fun readData(){
+                        db.collection("users")
+                            .get()
+                            .addOnSuccessListener { result ->
+                                for (document in result) {
+                                    val userId = document.id
+                                    val email = document.getString("Email")
+                                    val  emergencycontact= document.getString("EmergencyNumber")
+                                    Log.d(ContentValues.TAG, "${document.id} => ${document.data}")
+                                        Toast.makeText(this, "$emergencycontact", Toast.LENGTH_SHORT).show()
+                                            val latitude = intent.getDoubleExtra("latitude", 0.0)
+                                            val longitude = intent.getDoubleExtra("longitude", 0.0)
+                                    Toast.makeText(this, "$latitude,$longitude", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.w(ContentValues.TAG, "Error getting documents.", exception)
+                            }
+    }
+    private fun sendSms() {
+
+        try {
+            val smsManager = SmsManager.getDefault()
+//            val sentIntent = Intent("SMS_SENT")
+//            val deliveredIntent = Intent("SMS_DELIVERED")
+//
+//            // Create pending intents
+//            val sentPI = PendingIntent.getBroadcast(this, 0, sentIntent, 0)
+//            val deliveredPI = PendingIntent.getBroadcast(this, 0, deliveredIntent, 0)
+
+            // Divide the message into parts if it's too long
+//            val parts = smsManager.divideMessage(message)
+//
+//            // Send each part
+//            for (part in parts) {
+                smsManager.sendTextMessage("+919872169116", null, "Hello", null, null)
+//            }
+//            Toast.makeText(this, "Siddharth", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Handle the exception, for example, show a Toast with an error message
+            Toast.makeText(this, "Failed to send SMS", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
