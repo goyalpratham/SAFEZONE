@@ -62,7 +62,7 @@ class SignUpActivity : AppCompatActivity(){
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
 //                            if successful result can be send to signinactivity
-                            val intent = Intent(this, SignInActivity::class.java)
+                            val intent = Intent(this, AnimationActivity1::class.java)
                             startActivity(intent)
 
                         } else {
