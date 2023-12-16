@@ -252,7 +252,7 @@ class AccelerometerActivity :  CyaneaAppCompatActivity(), SensorEventListener {
 
                     try {
                         val smsManager = SmsManager.getDefault()
-                        smsManager.sendTextMessage("$emergencycontact", null, "hello , https://www.google.com/maps?q=$latitude,$longitude", null, null)
+                        smsManager.sendTextMessage("$emergencycontact", null, "hello this is , https://www.google.com/maps?q=$latitude,$longitude", null, null)
 
                     } catch (e: Exception) {
                         e.printStackTrace()
