@@ -1,7 +1,6 @@
 package com.example.loginandsignup
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.example.loginandsignup.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -9,11 +8,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.jaredrummler.cyanea.app.CyaneaAppCompatActivity
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : CyaneaAppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+
 
 
 

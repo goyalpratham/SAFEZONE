@@ -2,10 +2,11 @@ package com.example.loginandsignup
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.loginandsignup.databinding.SignInActivityBinding
 import com.google.firebase.auth.FirebaseAuth
-class SignInActivity : AppCompatActivity() {
+import com.jaredrummler.cyanea.app.CyaneaAppCompatActivity
+
+class SignInActivity : CyaneaAppCompatActivity() {
 
     private lateinit var binding: SignInActivityBinding
     private lateinit var firebaseAuth: FirebaseAuth
@@ -30,7 +31,7 @@ class SignInActivity : AppCompatActivity() {
 
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, AnimationActivity2::class.java)
                         startActivity(intent)
                         finish()
                     } else {
@@ -43,6 +44,7 @@ class SignInActivity : AppCompatActivity() {
 
             }
         }
+
     }
 //if the user is logedin send him to mainActivity
 //    override fun onStart() {

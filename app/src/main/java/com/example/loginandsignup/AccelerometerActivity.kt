@@ -3,7 +3,6 @@ package com.example.loginandsignup
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentValues
-import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -13,15 +12,16 @@ import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.loginandsignup.databinding.ActivityAccelerometerBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.jaredrummler.cyanea.app.CyaneaAppCompatActivity
 import java.util.*
 import kotlin.math.sqrt
 
 
-class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
+class AccelerometerActivity :  CyaneaAppCompatActivity(), SensorEventListener {
 
     private lateinit var binding: ActivityAccelerometerBinding
     private lateinit var sensorManager: SensorManager
@@ -34,6 +34,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
     private var isAccidentDetected = false
     private var isUserResponded = false
     private var emergencycontact: String = ""
+    val auth = FirebaseAuth.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,8 +95,8 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
 //                    startActivity(intent)
 //                }
             startAccidentDetection(formattedX.toDouble(), formattedY.toDouble(), formattedZ.toDouble())
-            }
         }
+    }
 
     private fun startAccidentDetection(formattedX: Double, formattedY: Double, formattedZ: Double) {
 
@@ -113,7 +114,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
             )
 //        Toast.makeText(this, "$accelerationMagnitude", Toast.LENGTH_SHORT).show()
 
-            val accidentThreshold = 1.5*SensorManager.GRAVITY_EARTH
+            val accidentThreshold = 2*SensorManager.GRAVITY_EARTH
 
 //            if (accelerationMagnitude > accidentThreshold) {
 //                isAccidentDetected = true
@@ -209,7 +210,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
 
     }
 
-//    private fun readData(){
+    //    private fun readData(){
 //        db.collection("users")
 //            .get()
 //            .addOnSuccessListener { result ->
@@ -229,40 +230,48 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
 //            }
 //    }
     private fun sendSms() {
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val userId = document.id
-                    val email = document.getString("Email")
-                     emergencycontact = document.getString("EmergencyNumber").toString()
+        val currentUser = auth.currentUser
+        val latitude = intent.getDoubleExtra("latitude", 0.0)
+        val longitude = intent.getDoubleExtra("longitude", 0.0)
+
+        if (currentUser != null) {
+            val currentUserEmail = currentUser.email
+
+            db.collection("users")
+                .whereEqualTo("Email", currentUserEmail)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val userId = document.id
+                        val email = document.getString("Email")
+                        emergencycontact = document.getString("EmergencyNumber").toString()
 
 
-                    Log.d(ContentValues.TAG, "${document.id} => ${document.data}")
+                        Log.d(ContentValues.TAG, "${document.id} => ${document.data}")
+                    }
+
+                    try {
+                        val smsManager = SmsManager.getDefault()
+                        smsManager.sendTextMessage("$emergencycontact", null, "https://www.google.com/maps?q=$latitude,$longitude", null, null)
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        // Handle the exception, for example, show a Toast with an error message
+                        Toast.makeText(this, "Failed to send SMS", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
-                try {
-                    val smsManager = SmsManager.getDefault()
-                    smsManager.sendTextMessage("$emergencycontact", null, "Hello", null, null)
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    // Handle the exception, for example, show a Toast with an error message
-                    Toast.makeText(this, "Failed to send SMS", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-//        try {
-//            val smsManager = SmsManager.getDefault()
-//            smsManager.sendTextMessage("$emergencycontact", null, "Hello", null, null)
-//
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            // Handle the exception, for example, show a Toast with an error message
-//            Toast.makeText(this, "Failed to send SMS", Toast.LENGTH_SHORT).show()
-//        }
+            //        try {
+            //            val smsManager = SmsManager.getDefault()
+            //            smsManager.sendTextMessage("$emergencycontact", null, "Hello", null, null)
+            //
+            //        } catch (e: Exception) {
+            //            e.printStackTrace()
+            //            // Handle the exception, for example, show a Toast with an error message
+            //            Toast.makeText(this, "Failed to send SMS", Toast.LENGTH_SHORT).show()
+            //        }
+        }
     }
-
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Not needed for this example

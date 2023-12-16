@@ -5,13 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.loginandsignup.databinding.SignUpActivityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.jaredrummler.cyanea.app.CyaneaAppCompatActivity
 
-class SignUpActivity : AppCompatActivity(){
+class SignUpActivity : CyaneaAppCompatActivity(){
 
 
     //variable binding for signupactivitybinding
@@ -43,10 +43,10 @@ class SignUpActivity : AppCompatActivity(){
             if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty() && Emergency.isNotEmpty()) {
                 if (pass == confirmPass) {
 //                    we will send email and password to firebaseAuth and result will be stored in it
-                    val i = Intent("sending data")
-                    intent.putExtra("Email", email)
-                    intent.putExtra("EmergencyContact", Emergency)
-                    sendBroadcast(i)
+//                    val intent = Intent("sending data")
+//                    intent.putExtra("Email", email)
+//                    intent.putExtra("EmergencyContact", Emergency)
+//                    sendBroadcast(intent)
                     val user = hashMapOf(
                         "Email" to email,
                         "EmergencyNumber" to Emergency

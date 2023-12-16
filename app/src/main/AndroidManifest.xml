@@ -20,15 +20,22 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="SAFEZONE"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Loginandsignup"
         tools:targetApi="31">
+        <activity
+            android:name=".Animation4"
+            android:exported="false" />
+        <activity
+            android:name=".AnimationActivity2"
+            android:exported="false" />
         <activity
             android:name=".AnimationActivity1"
             android:exported="false" />
@@ -37,7 +44,8 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Cyanea.Light.DarkActionBar" />
         <activity
             android:name=".AccelerometerActivity"
             android:exported="false" />
@@ -59,7 +67,8 @@
 
         <activity
             android:name=".SignInActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="SAFEZONE">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

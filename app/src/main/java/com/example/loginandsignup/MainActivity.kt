@@ -7,12 +7,13 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.loginandsignup.databinding.ActivityMainBinding
+import com.jaredrummler.cyanea.app.CyaneaAppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity :  CyaneaAppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private var service: Intent? = null
@@ -30,9 +31,15 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("longitude", longitude)
                     startActivity(intent)
                 }
+                btnAccelerometerReadings.setOnClickListener {
+                    val intent = Intent(this@MainActivity, AccelerometerActivity::class.java)
+                    intent.putExtra("latitude", latitude)
+                    intent.putExtra("longitude", longitude)
+                    startActivity(intent)
+                }
             }
-            binding.tvLatitude.text = "Latitude -> $latitude"
-            binding.tvLongitude.text = "Longitude -> $longitude"
+//            binding.tvLatitude.text = "Latitude -> $latitude"
+//            binding.tvLongitude.text = "Longitude -> $longitude"
         }
     }
 
@@ -79,18 +86,10 @@ class MainActivity : AppCompatActivity() {
             btnStartLocationTracking.setOnClickListener {
                 checkPermissions()
             }
-
             btnRemoveLocationTracking.setOnClickListener {
                 stopService(service)
+//                Toast.makeText(this,"Location Tracking Stopped",Toast.LENGTH_SHORT)
             }
-
-            btnAccelerometerReadings.setOnClickListener {
-                val intent = Intent(this@MainActivity, AccelerometerActivity::class.java)
-                startActivity(intent)
-            }
-
-
-
         }
 
     }
@@ -120,8 +119,10 @@ class MainActivity : AppCompatActivity() {
                         android.Manifest.permission.ACCESS_COARSE_LOCATION
                     )
                 )
+                Toast.makeText(this,"Location Tracking Started",Toast.LENGTH_SHORT).show()
             }else{
                 startService(service)
+                Toast.makeText(this,"Location Tracking Started",Toast.LENGTH_SHORT).show()
             }
         }
     }
